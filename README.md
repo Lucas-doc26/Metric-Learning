@@ -1,43 +1,45 @@
-#🧠 Metric Learning para Reconhecimento Facial
-Este projeto explora o uso de Metric Learning como alternativa eficiente ao problema de reconhecimento facial em contextos onde a base de dados de pessoas está em constante crescimento, como por exemplo em portarias de prédios residenciais.
+<h1 align="center" style="font-weight: bold;">Metric Learning para Reconhecimento Facial 🧠</h1>
 
-##🧩 O Problema
-Em sistemas tradicionais de reconhecimento facial, como classificadores baseados em redes neurais, cada pessoa é tratada como uma classe diferente. Isso gera um problema de escalabilidade:
+<p align="center">
+    <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python"/>
+    <img src="https://img.shields.io/badge/Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white" alt="Keras"/>
+    <img src="https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white" alt="TensorFlow"/>
+    <img src="https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white" alt="NumPy"/>
+    <img src="https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="Scikit-Learn"/>
+</p>
 
-Cada vez que uma nova pessoa entra no prédio, seria necessário re-treinar todo o modelo para adicionar essa nova classe.
+<p align="center">
+  <a href="#projeto">Projeto</a> •
+  <a href="#problema">Problema</a> • 
+  <a href="#solucao">Solução</a> •
+</p>
 
-Além disso, esse tipo de abordagem não lida bem com novas identidades ou com classes desconhecidas.
+<h2 id="projeto">📫 Projeto</h2>
 
-Esse tipo de retrabalho torna o sistema inviável na prática.
+Este projeto tem como objetivo desenvolver um sistema de reconhecimento facial utilizando **Metric Learning**, especialmente para situações onde novas identidades são constantemente adicionadas, como em **portarias de prédios residenciais ou comerciais**.
 
-##🎯 A Solução: Metric Learning
-Para resolver esse problema, aplicamos Metric Learning, uma abordagem que não aprende a classificar diretamente, mas sim a medir a similaridade entre rostos.
+<h2 id="problema">🧩 O Problema</h2>
 
-A ideia é treinar a rede para gerar um vetor de características (embedding) que represente cada rosto.
+Em sistemas convencionais de reconhecimento facial, cada pessoa é tratada como uma **classe distinta** em classificadores. Isso gera um grande problema:
 
-A rede é treinada usando o formato de triplets (âncora, positivo e negativo), buscando minimizar a distância entre exemplos da mesma pessoa (âncora e positivo) e maximizar a distância para exemplos de pessoas diferentes (âncora e negativo).
+- Sempre que uma nova pessoa entra no sistema, seria necessário **re-treinar o modelo inteiro** para incluir essa nova identidade.
+- Isso torna o processo **pouco escalável e inviável** para sistemas dinâmicos como os de portarias.
 
-##🧠 Arquitetura do Modelo
-Foi utilizada a VGG16 com pesos pré-treinados no ImageNet como base para extração de características.
+Além disso, sistemas com classes fixas **não conseguem lidar com indivíduos desconhecidos**, o que limita sua aplicação no mundo real.
 
-Camadas finais foram adaptadas para gerar embeddings vetoriais.
+<h2 id="solucao">🔍 A Solução: Metric Learning</h2>
 
-O treinamento é feito com triplet loss, ajustando o espaço vetorial para manter pessoas diferentes distantes e pessoas iguais próximas.
+Para contornar esses problemas, foi adotada uma abordagem de **Metric Learning**, onde o foco não é classificar rostos diretamente, mas sim **aprender um espaço vetorial em que rostos parecidos fiquem próximos** e diferentes fiquem distantes.
 
-##📏 Métrica de Similaridade
-Após o treinamento:
+- Utiliza-se a rede **VGG16 pré-treinada no ImageNet** como base para extrair **vetores de características (embeddings)** dos rostos.
+- O modelo é treinado usando o formato de **triplets** (âncora, positivo e negativo), com a **Triplet Loss** como função de perda.
+- Ao fim, cada rosto é representado por um vetor, e o reconhecimento é feito comparando esses vetores.
 
-O modelo é capaz de transformar qualquer imagem de rosto em um vetor (embedding).
+### 📏 Distância Euclidiana L2
 
-Para realizar o reconhecimento, utilizamos a distância euclidiana (L2) entre o vetor da imagem de entrada e os vetores de um banco de dados simulado.
+Após o treinamento, para identificar uma pessoa:
+- A imagem de entrada é convertida em embedding.
+- Esse vetor é comparado com todos os vetores do **banco de dados simulado**, usando **distância Euclidiana (L2)**.
+- A menor distância determina a pessoa mais parecida.
 
-O rosto mais próximo (menor distância) é retornado como o correspondente.
-
-##🧪 Exemplo de Aplicação
-Imagine a entrada de um novo morador. Ao invés de re-treinar o modelo, basta calcular e armazenar o embedding da foto do novo morador.
-Na próxima vez que ele aparecer, o sistema só precisa comparar os vetores — sem precisar alterar o modelo.
-
-##📚 Tecnologias e Ferramentas
-TensorFlow / Keras
-VGG16 (ImageNet)
-NumPy / Scikit-learn
+Essa abordagem permite **adicionar novas pessoas ao sistema sem precisar re-treinar o modelo**, bastando apenas gerar e armazenar seus vetores.
